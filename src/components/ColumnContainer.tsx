@@ -5,6 +5,7 @@ import { useMemo } from "react";
 
 import { Column, Task } from "@/types";
 import { TaskCard } from "@/components/TaskCard";
+import { Handle } from "./Handle";
 
 interface Props {
   column: Column;
@@ -16,7 +17,15 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
     return tasks.map((task) => task.id);
   }, [tasks]);
 
-  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+  const {
+    setNodeRef,
+    setActivatorNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: column.id,
     data: {
       type: "Column",
@@ -29,30 +38,25 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
     transform: CSS.Transform.toString(transform),
   };
 
+  let columnClasses = `
+    bg-black
+    w-[350px]
+    rounded-md
+    flex
+    flex-col
+  `;
+
   if (isDragging) {
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="bg-columnBackgroundColor opacity-40 border-2 border-pink-500 w-[350px] h-[200px] rounded-md flex flex-col"
-      />
-    );
+    columnClasses = `${columnClasses} opacity-30`;
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="bg-columnBackgroundColor w-[350px] rounded-md flex flex-col"
-    >
-      <div
-        {...attributes}
-        {...listeners}
-        className="bg-mainBackgroundColor text-md cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between"
-      >
-        <div className="flex gap-2">{column.title}</div>
+    <div ref={setNodeRef} style={style} className={columnClasses}>
+      <div {...attributes} className="p-3 flex items-center">
+        <Handle listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
+        <div className="flex ml-[10px]">{column.title}</div>
       </div>
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto min-h-[100px]">
+      <div className="flex flex-col">
         <SortableContext items={tasksIds} strategy={verticalListSortingStrategy}>
           {tasks.map((task) => (
             <TaskCard key={task.id} task={task} />

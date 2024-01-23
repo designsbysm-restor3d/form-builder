@@ -121,9 +121,9 @@ export const KanbanBoard = () => {
   };
 
   return (
-    <div className="m-auto flex min-h-screen w-full overflow-x-auto overflow-y-hidden p-[40px]">
+    <div className="flex p-[20px]">
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col">
           <SortableContext items={columnsId} strategy={verticalListSortingStrategy}>
             {columns.map((column) => (
               <ColumnContainer

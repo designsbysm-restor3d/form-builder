@@ -4,8 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        mainBackgroundColor: "#0d1117",
-        columnBackgroundColor: "#161c22",
+        handleColor: "#5C6670",
       },
     },
   },

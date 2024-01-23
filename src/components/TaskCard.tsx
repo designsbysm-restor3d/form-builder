@@ -2,13 +2,22 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 import { Task } from "@/types";
+import { Handle } from "./Handle";
 
 interface Props {
   task: Task;
 }
 
 export const TaskCard = ({ task }: Props) => {
-  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+  const {
+    setActivatorNodeRef,
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: task.id,
     data: {
       type: "Task",
@@ -21,33 +30,22 @@ export const TaskCard = ({ task }: Props) => {
     transform: CSS.Transform.toString(transform),
   };
 
-  //   console.log(style);
-  //   {
-  //     "transition": "transform 200ms ease",
-  //     "transform": "translate3d(0px, -116px, 0) scaleX(1) scaleY(1)"
-  // }
+  let cardClasses = `
+    p-3
+    items-center
+    flex    
+    bg-black
+    ml-[40px]
+    `;
 
   if (isDragging) {
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="opacity-30 bg-mainBackgroundColor p-2.5 min-h-[60px] items-center flex text-left rounded-xl border-2 border-rose-500  cursor-grab relative"
-      />
-    );
+    cardClasses = `${cardClasses} opacity-30`;
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="bg-mainBackgroundColor p-2.5 min-h-[60px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative task"
-    >
-      <p className="my-auto w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
-        {task.content}
-      </p>
+    <div ref={setNodeRef} style={style} {...attributes} className={cardClasses}>
+      <Handle listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
+      <p className="ml-[10px]">{task.content}</p>
     </div>
   );
 };
