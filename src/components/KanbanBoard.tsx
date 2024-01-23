@@ -7,7 +7,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { horizontalListSortingStrategy, SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -17,85 +17,39 @@ import { TaskCard } from "@/components/TaskCard";
 
 const defaultCols: Column[] = [
   {
-    id: "todo",
-    title: "Todo",
+    id: "a829e0f2-79d2-4d87-82a4-b053c26a75da",
+    title: "Is the patient in R3id?",
   },
   {
-    id: "doing",
-    title: "Work in progress",
+    id: "43718c5d-191b-4195-9783-11be9b932c0e",
+    title: "Is this a truama case?",
   },
   {
-    id: "done",
-    title: "Done",
+    id: "6afabba0-8607-4caf-8423-a64b951ee2c5",
+    title: "Is this an oncology case?",
   },
 ];
 
 const defaultTasks: Task[] = [
   {
     id: "1",
-    columnId: "todo",
-    content: "List admin APIs for dashboard",
+    columnId: "a829e0f2-79d2-4d87-82a4-b053c26a75da",
+    content: "What is the patient's name?",
   },
   {
     id: "2",
-    columnId: "todo",
-    content:
-      "Develop user registration functionality with OTP delivered on SMS after email confirmation and phone number confirmation",
-  },
-  {
-    id: "3",
-    columnId: "doing",
-    content: "Conduct security testing",
-  },
-  {
-    id: "4",
-    columnId: "doing",
-    content: "Analyze competitors",
+    columnId: "a829e0f2-79d2-4d87-82a4-b053c26a75da",
+    content: "What is the patient's gender?",
   },
   {
     id: "5",
-    columnId: "done",
-    content: "Create UI kit documentation",
-  },
-  {
-    id: "6",
-    columnId: "done",
-    content: "Dev meeting",
-  },
-  {
-    id: "7",
-    columnId: "done",
-    content: "Deliver dashboard prototype",
+    columnId: "6afabba0-8607-4caf-8423-a64b951ee2c5",
+    content: "How much does the patient wieght?",
   },
   {
     id: "8",
-    columnId: "todo",
-    content: "Optimize application performance",
-  },
-  {
-    id: "9",
-    columnId: "todo",
-    content: "Implement data validation",
-  },
-  {
-    id: "10",
-    columnId: "todo",
-    content: "Design database schema",
-  },
-  {
-    id: "11",
-    columnId: "todo",
-    content: "Integrate SSL web certificates into workflow",
-  },
-  {
-    id: "12",
-    columnId: "doing",
-    content: "Implement error logging and monitoring",
-  },
-  {
-    id: "13",
-    columnId: "doing",
-    content: "Design and implement responsive UI",
+    columnId: "a829e0f2-79d2-4d87-82a4-b053c26a75da",
+    content: "What is the patient's phone number or email address?",
   },
 ];
 
@@ -167,20 +121,18 @@ export const KanbanBoard = () => {
   };
 
   return (
-    <div className="m-auto flex min-h-screen w-full items-center overflow-x-auto overflow-y-hidden px-[40px]">
+    <div className="m-auto flex min-h-screen w-full overflow-x-auto overflow-y-hidden p-[40px]">
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <div className="m-auto flex gap-4">
-          <div className="flex gap-4">
-            <SortableContext items={columnsId} strategy={horizontalListSortingStrategy}>
-              {columns.map((column) => (
-                <ColumnContainer
-                  key={column.id}
-                  column={column}
-                  tasks={tasks.filter((task) => task.columnId === column.id)}
-                />
-              ))}
-            </SortableContext>
-          </div>
+        <div className="flex flex-col gap-4">
+          <SortableContext items={columnsId} strategy={verticalListSortingStrategy}>
+            {columns.map((column) => (
+              <ColumnContainer
+                key={column.id}
+                column={column}
+                tasks={tasks.filter((task) => task.columnId === column.id)}
+              />
+            ))}
+          </SortableContext>
         </div>
         {createPortal(
           <DragOverlay>

@@ -34,7 +34,7 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="bg-columnBackgroundColor opacity-40 border-2 border-pink-500 w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col"
+        className="bg-columnBackgroundColor opacity-40 border-2 border-pink-500 w-[350px] h-[200px] rounded-md flex flex-col"
       />
     );
   }
@@ -43,16 +43,16 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-columnBackgroundColor w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col"
+      className="bg-columnBackgroundColor w-[350px] rounded-md flex flex-col"
     >
       <div
         {...attributes}
         {...listeners}
-        className="bg-mainBackgroundColor text-md h-[60px] cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between"
+        className="bg-mainBackgroundColor text-md cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between"
       >
         <div className="flex gap-2">{column.title}</div>
       </div>
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
+      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto min-h-[100px]">
         <SortableContext items={tasksIds} strategy={verticalListSortingStrategy}>
           {tasks.map((task) => (
             <TaskCard key={task.id} task={task} />
