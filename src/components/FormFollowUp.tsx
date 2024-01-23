@@ -1,11 +1,11 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { FollowUp } from "@/types";
+import { Question } from "@/types";
 import { Handle } from "@/components/Handle";
 
 interface Props {
-  followUp: FollowUp;
+  followUp: Question;
 }
 
 export const FormFollowUp = ({ followUp }: Props) => {
