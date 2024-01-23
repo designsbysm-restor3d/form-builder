@@ -12,7 +12,7 @@ export const Handle = ({ listeners, setActivatorNodeRef }: Props) => {
     <div
       ref={setActivatorNodeRef}
       {...listeners}
-      className="p-1 bg-handleColor text-columnBackgroundColor rounded-sm cursor-grab"
+      className="p-1 bg-handleColor text-black rounded-sm cursor-grab"
     >
       <HandleIcon />
     </div>

@@ -3,19 +3,19 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo } from "react";
 
-import { Column, Task } from "@/types";
-import { TaskCard } from "@/components/TaskCard";
-import { Handle } from "./Handle";
+import type { FollowUp, Question } from "@/types";
+import { FormFollowUp } from "@/components/FormFollowUp";
+import { Handle } from "@/components/Handle";
 
 interface Props {
-  column: Column;
-  tasks: Task[];
+  question: Question;
+  followUps: FollowUp[];
 }
 
-export const ColumnContainer = ({ column, tasks }: Props) => {
-  const tasksIds = useMemo(() => {
-    return tasks.map((task) => task.id);
-  }, [tasks]);
+export const FormQuestion = ({ followUps, question }: Props) => {
+  const followUpIds = useMemo(() => {
+    return followUps.map((followUp) => followUp.id);
+  }, [followUps]);
 
   const {
     setNodeRef,
@@ -26,10 +26,10 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
     transition,
     isDragging,
   } = useSortable({
-    id: column.id,
+    id: question.id,
     data: {
-      type: "Column",
-      column,
+      type: "Question",
+      question,
     },
   });
 
@@ -38,7 +38,7 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
     transform: CSS.Transform.toString(transform),
   };
 
-  let columnClasses = `
+  let classes = `
     bg-black
     w-[350px]
     rounded-md
@@ -47,19 +47,19 @@ export const ColumnContainer = ({ column, tasks }: Props) => {
   `;
 
   if (isDragging) {
-    columnClasses = `${columnClasses} opacity-30`;
+    classes = `${classes} opacity-30`;
   }
 
   return (
-    <div ref={setNodeRef} style={style} className={columnClasses}>
+    <div ref={setNodeRef} style={style} className={classes}>
       <div {...attributes} className="p-3 flex items-center">
         <Handle listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
-        <div className="flex ml-[10px]">{column.title}</div>
+        <div className="flex ml-[10px]">{question.prompt}</div>
       </div>
       <div className="flex flex-col">
-        <SortableContext items={tasksIds} strategy={verticalListSortingStrategy}>
-          {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+        <SortableContext items={followUpIds} strategy={verticalListSortingStrategy}>
+          {followUps.map((followUp) => (
+            <FormFollowUp key={followUp.id} followUp={followUp} />
           ))}
         </SortableContext>
       </div>

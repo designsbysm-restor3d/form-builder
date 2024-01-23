@@ -1,6 +1,6 @@
 import "@/App.css";
-import { KanbanBoard } from "@/components/KanbanBoard";
+import { FormBuilder } from "@/components/FormBuilder";
 
 export const App = () => {
-  return <KanbanBoard />;
+  return <FormBuilder />;
 };

@@ -1,12 +1,12 @@
 export type Id = string | number;
 
-export type Column = {
+export type FollowUp = {
   id: Id;
-  title: string;
+  questionId: Id;
+  prompt: string;
 };
 
-export type Task = {
+export type Question = {
   id: Id;
-  columnId: Id;
-  content: string;
+  prompt: string;
 };

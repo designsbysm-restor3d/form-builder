@@ -1,14 +1,14 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { Task } from "@/types";
-import { Handle } from "./Handle";
+import { FollowUp } from "@/types";
+import { Handle } from "@/components/Handle";
 
 interface Props {
-  task: Task;
+  followUp: FollowUp;
 }
 
-export const TaskCard = ({ task }: Props) => {
+export const FormFollowUp = ({ followUp }: Props) => {
   const {
     setActivatorNodeRef,
     setNodeRef,
@@ -18,10 +18,10 @@ export const TaskCard = ({ task }: Props) => {
     transition,
     isDragging,
   } = useSortable({
-    id: task.id,
+    id: followUp.id,
     data: {
-      type: "Task",
-      task,
+      type: "FollowUp",
+      followUp,
     },
   });
 
@@ -45,7 +45,7 @@ export const TaskCard = ({ task }: Props) => {
   return (
     <div ref={setNodeRef} style={style} {...attributes} className={cardClasses}>
       <Handle listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
-      <p className="ml-[10px]">{task.content}</p>
+      <p className="ml-[10px]">{followUp.prompt}</p>
     </div>
   );
 };
