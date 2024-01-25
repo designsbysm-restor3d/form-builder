@@ -1,6 +1,7 @@
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -12,7 +13,6 @@ import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Id, Question } from "@/types";
-import { FormFollowUp } from "@/components/FormFollowUp";
 import { FormQuestion } from "@/components/FormQuestion";
 
 interface Props {
@@ -20,8 +20,7 @@ interface Props {
 }
 
 export const FormBuilder = ({ questions: defaultQuestions }: Props) => {
-  const [activeQuestion, setActiveQuestion] = useState<Question>();
-  const [activeFollowUp, setActiveFollowUp] = useState<Question>();
+  const [dragQuestion, setDragQuestion] = useState<Question>();
   const [questions, setQuestions] = useState<Question[]>(defaultQuestions);
 
   const questionIds = useMemo(() => questions.map((col) => col.id), [questions]);
@@ -35,20 +34,19 @@ export const FormBuilder = ({ questions: defaultQuestions }: Props) => {
   );
 
   const onDragStart = (event: DragStartEvent) => {
-    if (event.active.data.current?.type === "Question") {
-      setActiveQuestion(event.active.data.current.question as Question);
-      return;
-    }
+    const current = event.active.data.current?.question as Question;
+    setDragQuestion(current);
+    console.log("DRAGGING", current?.prompt);
+  };
 
-    if (event.active.data.current?.type === "FollowUp") {
-      setActiveFollowUp(event.active.data.current.followUp as Question);
-      return;
-    }
+  const onDragOver = (event: DragOverEvent) => {
+    const current = event.over?.data.current?.question as Question;
+    console.log("OVER", current?.prompt);
   };
 
   const onDragEnd = (event: DragEndEvent) => {
-    setActiveQuestion(undefined);
-    setActiveFollowUp(undefined);
+    console.log("DROPPING");
+    setDragQuestion(undefined);
 
     const { active, over } = event;
     if (!over) return;
@@ -73,7 +71,7 @@ export const FormBuilder = ({ questions: defaultQuestions }: Props) => {
     const isOverFollowUp = over.data.current?.type === "FollowUp";
     if (isActiveFollowUp && isOverFollowUp) {
       setQuestions((questions) => {
-        const activeFollowUp = active.data.current?.followUp as Question;
+        const activeFollowUp = active.data.current?.question as Question;
         const parentId = activeFollowUp?.parentId as Id;
 
         return questions.map((parentQuestion) => {
@@ -101,7 +99,12 @@ export const FormBuilder = ({ questions: defaultQuestions }: Props) => {
 
   return (
     <div className="flex p-[20px]">
-      <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={onDragStart}
+        onDragOver={onDragOver}
+        onDragEnd={onDragEnd}
+      >
         <div className="flex flex-col">
           <SortableContext items={questionIds} strategy={verticalListSortingStrategy}>
             {questions.map((question) => (
@@ -110,10 +113,7 @@ export const FormBuilder = ({ questions: defaultQuestions }: Props) => {
           </SortableContext>
         </div>
         {createPortal(
-          <DragOverlay>
-            {activeQuestion && <FormQuestion question={activeQuestion} />}
-            {activeFollowUp && <FormFollowUp followUp={activeFollowUp} />}
-          </DragOverlay>,
+          <DragOverlay>{dragQuestion && <FormQuestion question={dragQuestion} />}</DragOverlay>,
           document.body
         )}
       </DndContext>

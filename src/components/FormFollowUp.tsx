@@ -21,7 +21,7 @@ export const FormFollowUp = ({ followUp }: Props) => {
     id: followUp.id,
     data: {
       type: "FollowUp",
-      followUp,
+      question: followUp,
     },
   });
 
